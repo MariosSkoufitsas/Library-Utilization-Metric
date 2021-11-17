@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
@@ -20,6 +21,37 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
    
 public class NewMain {
+    
+    //ArrayList<String> soursepath = new ArrayList<String>();
+    static ArrayList<String> soursepath = new ArrayList<String>();
+    
+    
+    //methodos pou mas epistrefei ola ta arxeia
+    public static void listFilesForFolder(final File folder2) {
+    
+    for (final File fileEntry : folder2.listFiles()) {
+        if (fileEntry.isDirectory()) {
+            listFilesForFolder(fileEntry);
+        } else {
+            
+            if(test(fileEntry.getName(), ".java")){
+                soursepath.add(fileEntry.getPath());
+                System.out.println(fileEntry.getPath());
+            }
+            
+        }
+    }
+}
+    //krataei kai elegxei ta teleutea 4 psifia tou string kai kaleite sthn proigoumenh methodo
+    public static boolean test(String a, String b) {
+    if (a.length() > 5) {
+        a = a.substring(a.length() - 5);
+        if (b.length() > 4) {
+            b = b.substring(b.length() - 5);
+        }
+    }
+    return a.equals(b);
+}
     
     
     public static String[] myBadGlobalArray = new String[10];
@@ -46,7 +78,13 @@ public class NewMain {
         }
         System.out.println("Diplotupa "+sum+" Megeuos "+a.size());
     }
-         /* private static class MethodNamePrinter extends VoidVisitorAdapter<Void> {
+          
+    
+        //statik metablites stous metrites gia methodous kai bibliothikes
+         public  static int i=0,i2=0;
+        //metrame to plithos toon methodon kai toon biblhothikon
+   
+        private static class MethodNamePrinter extends VoidVisitorAdapter<Void> {
         @Override
         public void visit(MethodDeclaration md, Void arg) {
         super.visit(md, arg);
@@ -60,16 +98,18 @@ public class NewMain {
         System.out.println("Library Name Printed: " + md.getName());
         }            
  }
+        //emafanizoume to plhthos ton methodon kai ton bibliothikon
     
-     public static void count(){
+        public static void count(){
             System.out.println("Number of methods: "+i);
             System.out.println("Number of libraries: "+i2);
-        }*/
+        }
  
      
 
-    // public  static int i=0,i2=0;
+    
  
+    //auth h methodos mas epistrefei apo to pom posa jar arxeia xrhshmopoioyme kai ta emfanizoyme
     public static void printPomDependencies() throws IOException, SAXException, ParserConfigurationException {
     // pom relative to your project directory
     final File pomFile = new File("./pom.xml");
@@ -97,6 +137,7 @@ public class NewMain {
     }
 } 
     
+    //einai methodos gia na trexoume cmd entoles
     public static void CMD(String cmd)
     {
         String[] command =
@@ -109,16 +150,7 @@ public class NewMain {
 		        new Thread(new SyncPipe(p.getErrorStream(), System.err)).start();
 	                new Thread(new SyncPipe(p.getInputStream(), System.out)).start();
 	                PrintWriter stdin = new PrintWriter(p.getOutputStream());
-	                
-                        
-                        
                         stdin.println(cmd);
-                      
-             
-                        
-                        
-                        System.out.println("edeeeeeeeeeeeeeeeeeeeeeeeeeeee"+cmd);
-                        
 	                stdin.close();
 	                p.waitFor();
 	    	} catch (Exception e) {
@@ -127,8 +159,8 @@ public class NewMain {
     }
     
     
-    
-        public static void printPomDependencies(String File_Path) throws IOException, SAXException, ParserConfigurationException {
+    //pairnei kai emafanizei ta jar apo ta dependences
+    public static void printPomDependencies(String File_Path) throws IOException, SAXException, ParserConfigurationException {
     // pom relative to your project directory
     final File pomFile = new File(File_Path+"/pom.xml");
 
@@ -142,10 +174,6 @@ public class NewMain {
         final Node n = dependencyNodes.item(i);
 
         final org.w3c.dom.NodeList list = n.getChildNodes();
-        
-        
-        
-
         System.out.println("----------------------------------");
         String name="";
         for (int j = 0; j < list.getLength(); j++) 
@@ -153,10 +181,6 @@ public class NewMain {
             final Node n2 = list.item(j);
             // do not print empty text nodes or others...
             if (n2.getNodeType() != Node.ELEMENT_NODE) continue;
-            
-            
-            System.out.println(n2.getTextContent()+n2.getNodeName()+"   "+i+" "+j);
-            
             if(j==3){
                 name=n2.getTextContent();               
 
@@ -165,23 +189,32 @@ public class NewMain {
                
                 myBadGlobalArray[i]=name+"-"+n2.getTextContent()+".jar";
             }
-            
-            
-
-            System.out.println(n2.getNodeName() + ":" + n2.getTextContent());
-
         }
     }
 } 
      
-
- private static final String FILE_PATH = "C:\\Users\\mario\\Desktop\\πτυχιακη\\src\\main\\java\\calculator\\Main.java";
+    //pairnoyme ta path pou theloume
     
-    
+    private static final String FILE_PATH = "C:\\Users\\mario\\Desktop\\πτυχιακη\\src\\main\\java\\calculator\\Main.java";
+  
     private static final String FILE_PATH2="C:\\Users\\mario\\Desktop\\πτυχιακη\\src\\main\\java\\calculator\\Main.java";
     
-    private static final String FILE_PATH3="C:\\Users\\mario\\Desktop\\testProject";
+    //private static final String FILE_PATH3="C:\\Users\\mario\\Desktop\\testProject";
+    
+    
+    private static final String FILE_PATH4="C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources";
+    
     public static void main(String[] args) throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
+        
+        
+        Scanner myObj = new Scanner(System.in);
+        String userName;
+    
+        String FILE_PATH3;
+        System.out.println("Enter path project"); 
+        FILE_PATH3 = myObj.nextLine();
+        
+        
         /*CompilationUnit cu = StaticJavaParser.parse(new File(FILE_PATH));
         System.out.println(cu);
          //VoidVisitor<Void> methodNameVisitor = new MethodNamePrinter();
@@ -226,30 +259,15 @@ e.printStackTrace();
 }*/
         
                 // TODO code application logic here
-        //CompilationUnit cu = StaticJavaParser.parse(new File(FILE_PATH3));
-       
-        
-        
-        
-        //CompilationUnit cu1 = StaticJavaParser.parse(new File(FILE_PATH3));
-        
-        //NodeList<ImportDeclaration> a = cu1.getImports();
+        /*CompilationUnit cu = StaticJavaParser.parse(new File(FILE_PATH3));
+        CompilationUnit cu1 = StaticJavaParser.parse(new File(FILE_PATH3));
+        NodeList<ImportDeclaration> a = cu1.getImports();*/
      
         //Nul(a);
         
         printPomDependencies(FILE_PATH3);
-        
-        
-        
-        
-        
-        
-        
-        
-
+ 
         String CWD = System.getProperty("user.dir");
-        
-        
         
         String cmd_Command="cd " + FILE_PATH3 +" & mvn dependency:copy-dependencies -DexcludeTransitive -DoutputDirectory="+CWD+"\\target\\lib";
         
@@ -258,6 +276,45 @@ e.printStackTrace();
         String cmd2 ="dir /a:-d /s /b "+CWD + "\\target\\lib"+" | find /c \":\" ";
         
         CMD(cmd2);
+        
+        String cd_Command="cd " + FILE_PATH3+"& mvn dependency:copy-dependencies -Dclassifier=sources  -DexcludeTransitive -DoutputDirectory="+CWD+"\\target\\lib\\sources";
+        
+        CMD(cd_Command);
+        
+        File folder = new File("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources");
+        
+        File[] listOfFiles = folder.listFiles();
+        
+        
+        for (int i = 0; i < listOfFiles.length; i++) {
+            String cmd3="cd "+FILE_PATH4 +" & jar xf "+listOfFiles[i].getName();;
+            CMD(cmd3);
+            //
+                
+        }
+        
+        
+        final File folder2 = new File("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources");
+        listFilesForFolder(folder2);
+        
+        System.out.println(soursepath.size()+"******************************************************************");
+        
+        //System.out.println(soursepath.get(0);
+        for (int i=0; i<soursepath.size();i++)
+        {
+            System.out.println(soursepath.get(i));
+            //MAVEN PAIRNOUME OLO TON KODIKA
+            CompilationUnit cu = StaticJavaParser.parse(new File(soursepath.get(i)));
+            //System.out.println(cu);
+            VoidVisitor<Void> methodNameVisitor = new MethodNamePrinter();
+            methodNameVisitor.visit(cu, null);
+            
+        }
+        count();
+        
+        
+        
+        //String cmd3="";
         //String aaaaaaaaa = CMD(cmd2);
         
 
@@ -302,6 +359,7 @@ e.printStackTrace();
          
          
          //Nul(a);
+    
     }
     
-}
+
