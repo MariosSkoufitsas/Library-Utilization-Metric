@@ -42,8 +42,8 @@ public class NewMain {
     static ArrayList<String> soursepath = new ArrayList<String>();
     static ArrayList<String> methodmain = new ArrayList<String>();
     static ArrayList<String> arm = new ArrayList<String>();
-    //static boolean bolmethee=true;
-    static int mainmethod=0;
+    static boolean bolmethee=true;
+    static double mainmethod=0;
     
     
     //trexoume sth main kai mas epistrefei ta onomata
@@ -63,14 +63,28 @@ public class NewMain {
         return newList;
     }}
     
-
     
+    private static class MethodVisitor2 extends VoidVisitorAdapter<Void>{
+        @Override
+        public void visit(MethodCallExpr n, Void arg) {
+            
+        super.visit(n, arg);
+        try{
+            arm.add(n.resolve().getQualifiedName());
+            System.out.println(n.resolve().getQualifiedName());
+        }
+        catch (Exception e) {
+        e.printStackTrace();
+        return;}
+            
+            
+        }
+    }
+ 
     public static String[] myBadGlobalArray = new String[10];
     
      //private static final String FILE_PATH = "C:\\Users\\mario\\Desktop\\mavenperser\\src\\main\\java\\NewClass.java";
 
-          
-    
         //statik metablites stous metrites gia methodous kai bibliothikes
          public  static int i=0,i2=0;
         //metrame to plithos toon methodon kai toon biblhothikon
@@ -79,21 +93,27 @@ public class NewMain {
         @Override
         public void visit(MethodDeclaration md, Void arg) {
         super.visit(md, arg);
-        i++;
+        
+        if(!bolmethee && md.isPublic()){
+            i++;
+        }
+        
             for(int i=0; i<arm.size(); i++){
-                if(arm.get(i).equals(md.getNameAsString())){
+                if(arm.get(i).equals(md.resolve().getQualifiedName())){
                     mainmethod=mainmethod+1;
                 }
             
         }
-        System.out.println("Method Name Printed: " +md.resolve().getPackageName()+"  op "+ md.resolve().getQualifiedName());
-        
-        }           
+        /*if(bolmethee){
+            arm.add(md.resolve().getQualifiedName());
+        }*/
+        System.out.println("Method Name Printed: " + md.resolve().getQualifiedName());
+        }          
  }
         //emafanizoume to plhthos ton methodon kai ton bibliothikon
-    
-        public static void count(){
+        public static int count(){
             System.out.println("Number of methods: "+i);
+            return i;
             
         }
  
@@ -195,7 +215,7 @@ public class NewMain {
         CombinedTypeSolver combinedTypeSolver2 = new CombinedTypeSolver();
         combinedTypeSolver2.add(new ReflectionTypeSolver());
         ParserConfiguration parserConfiguration2 = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver2));
-        ProjectRoot projectRoot2 = new SymbolSolverCollectionStrategy(parserConfiguration2).collect(Path.of("C:\\Users\\mario\\Desktop\\JavaCodeMetricsCalculator-src_code_analyzer\\src\\main"));
+        ProjectRoot projectRoot2 = new SymbolSolverCollectionStrategy(parserConfiguration2).collect(Path.of(FILE_PATH3+"\\src\\main"));
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         for (SourceRoot sourceRoot : projectRoot2.getSourceRoots()) {
     try {
@@ -203,17 +223,13 @@ public class NewMain {
         List<CompilationUnit> compilationUnits = sourceRoot.getCompilationUnits();
         //System.out.println(compilationUnits);
         for(int x=0; x<compilationUnits.size();x++){
-            VoidVisitor<Void> methodNameVisitor = new MethodNamePrinter();
-                methodNameVisitor.visit(compilationUnits.get(x), null);
+            VoidVisitor<Void> methodNameVisitor2 = new MethodVisitor2();
+                methodNameVisitor2.visit(compilationUnits.get(x), null);
         }
     } catch (IOException e) {
         e.printStackTrace();
         return;}}
-        
-        
-
-         
-        
+        bolmethee=false;
         
         printPomDependencies(FILE_PATH3);
         String CWD = System.getProperty("user.dir");       
@@ -229,7 +245,7 @@ public class NewMain {
             String cmd3="cd "+FILE_PATH4 +" & jar xf "+listOfFiles[i].getName();;
             CMD(cmd3);      
         }
-        
+
         
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         //combinedTypeSolver.add(new JavaParserTypeSolver(new File("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources")));
@@ -237,15 +253,17 @@ public class NewMain {
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
         ProjectRoot projectRoot = new SymbolSolverCollectionStrategy(parserConfiguration).collect(Path.of("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources"));
         
-        
+         
         for (SourceRoot sourceRoot : projectRoot.getSourceRoots()) {
     try {
         sourceRoot.tryToParse();
         List<CompilationUnit> compilationUnits = sourceRoot.getCompilationUnits();
         //System.out.println(compilationUnits);
         for(int x=0; x<compilationUnits.size();x++){
+            
             VoidVisitor<Void> methodNameVisitor = new MethodNamePrinter();
                 methodNameVisitor.visit(compilationUnits.get(x), null);
+                
         }
     } catch (IOException e) {
         e.printStackTrace();
@@ -253,6 +271,9 @@ public class NewMain {
     }
    
         System.out.println("oi  methodoi pou brethikan "+mainmethod+" SYNOLIKES METHODOI ");
-        count();
+        int a=count();
+        double b=(mainmethod/a)*100;
+        System.out.println("Apotelesma "+b+" %");
+        
     }
 }}
