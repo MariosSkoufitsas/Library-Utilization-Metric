@@ -8,8 +8,10 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -24,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,13 +47,21 @@ public class NewMain {
     static ArrayList<String> arm = new ArrayList<String>();
     static boolean bolmethee=true;
     static double mainmethod=0;
+    static boolean afalse=false;
+    static boolean bfalse=false;
+    
+    
+    static ArrayList<String> namepac = new ArrayList<String>();
+    static ArrayList<String> namepacparanomasths = new ArrayList<String>();
+    
     
     
     //trexoume sth main kai mas epistrefei ta onomata
     private static class MethodVisitor extends VoidVisitorAdapter
     {
 
-        //afairoume diplotupa apo array list autos o tropos mporei na alaxtei
+}
+           //afairoume diplotupa apo array list autos o tropos mporei na alaxtei
        public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
     {
         ArrayList<T> newList = new ArrayList<T>();
@@ -61,7 +72,7 @@ public class NewMain {
             }
         }
         return newList;
-    }}
+    } 
     
     
     private static class MethodVisitor2 extends VoidVisitorAdapter<Void>{
@@ -70,8 +81,9 @@ public class NewMain {
             
         super.visit(n, arg);
         try{
-            arm.add(n.resolve().getQualifiedName());
-            System.out.println(n.resolve().getQualifiedName());
+            arm.add(n.getScope()+" "+n.getNameAsString());
+            System.out.println(n.getScope()+" "+n.getNameAsString());
+                  
         }
         catch (Exception e) {
         e.printStackTrace();
@@ -80,13 +92,14 @@ public class NewMain {
             
         }
     }
- 
     public static String[] myBadGlobalArray = new String[10];
     
      //private static final String FILE_PATH = "C:\\Users\\mario\\Desktop\\mavenperser\\src\\main\\java\\NewClass.java";
 
         //statik metablites stous metrites gia methodous kai bibliothikes
          public  static int i=0,i2=0;
+         
+         
         //metrame to plithos toon methodon kai toon biblhothikon
    
         private static class MethodNamePrinter extends VoidVisitorAdapter<Void> {
@@ -94,20 +107,82 @@ public class NewMain {
         public void visit(MethodDeclaration md, Void arg) {
         super.visit(md, arg);
         
-        if(!bolmethee && md.isPublic()){
+        if(md.isPublic()){
             i++;
+            
+            
+            
+            
+            String mystring=md.resolve().getPackageName();
+            
+            
+            
+            
+            //String strings =mystring.substring(1,mystring.lastIndexOf("."));
+            //System.out.println("pali ksekinhma neoi agvnes "+strings);
+            
+            
+            
+            String [] arr = mystring.split("\\.");
+            int N=3; 
+            String nWords="";
+
+
+            for(int i=0; i<N ; i++){
+                nWords = nWords + arr[i] + "."  ;
+            }
+
+            System.out.println(nWords);
+            
+ 
+            if(bolmethee){
+                    namepac.add(nWords);
+                    namepacparanomasths.add("0");
+                    bolmethee=false;
+                            }
+                        int kametr=0,ka;
+                        for(ka=0; ka<namepac.size(); ka++){
+                            if(namepac.get(ka).equals(nWords)){
+                                String na=namepacparanomasths.get(ka);
+                                int nana=parseInt(na);
+                                nana++;
+                                namepacparanomasths.set(ka,String.valueOf(nana));
+                            }
+                                if(!namepac.get(ka).equals(nWords)){
+                                    kametr++;
+                                    
+                                }
+  
+                            }
+
+                        if(ka==kametr){
+                                    
+                                    namepac.add(nWords);
+                                    namepacparanomasths.add("1");
+                                    //System.out.println(namepac);
+                                    
+                                }
+            
+                                   
+            
+            
+                        for(int i=0; i<methodmain.size(); i++){
+                            if(methodmain.get(i).equals("Optional["+md.resolve().getClassName()+"] "+md.resolve().getName())){
+                            mainmethod=mainmethod+1;
+                            System.out.println(mainmethod);
+                                }
+
+            
+            }
+
         }
         
-            for(int i=0; i<arm.size(); i++){
-                if(arm.get(i).equals(md.resolve().getQualifiedName())){
-                    mainmethod=mainmethod+1;
-                }
-            
-        }
+
         /*if(bolmethee){
             arm.add(md.resolve().getQualifiedName());
         }*/
-        System.out.println("Method Name Printed: " + md.resolve().getQualifiedName());
+        
+        System.out.println("Method Name Printed: "+md.resolve().getPackageName());
         }          
  }
         //emafanizoume to plhthos ton methodon kai ton bibliothikon
@@ -130,7 +205,7 @@ public class NewMain {
     for (int i = 0; i < dependencyNodes.getLength(); i++) {
         final Node n = dependencyNodes.item(i);
         final org.w3c.dom.NodeList list = n.getChildNodes();
-        System.out.println("----------------------------------");
+        System.out.println("---------------***********-------------------");
         for (int j = 0; j < list.getLength(); j++) {
             final Node n2 = list.item(j);
             // do not print empty text nodes or others...
@@ -176,7 +251,7 @@ public class NewMain {
     {
         final Node n = dependencyNodes.item(i);
         final org.w3c.dom.NodeList list = n.getChildNodes();
-        System.out.println("----------------------------------");
+        System.out.println("---------------************-------------------"+n.getTextContent());
         String name="";
         for (int j = 0; j < list.getLength(); j++) 
         {
@@ -229,7 +304,9 @@ public class NewMain {
     } catch (IOException e) {
         e.printStackTrace();
         return;}}
-        bolmethee=false;
+        //bolmethee=false;
+        
+        methodmain=removeDuplicates(arm);
         
         printPomDependencies(FILE_PATH3);
         String CWD = System.getProperty("user.dir");       
@@ -274,6 +351,7 @@ public class NewMain {
         int a=count();
         double b=(mainmethod/a)*100;
         System.out.println("Apotelesma "+b+" %");
-        
+        System.out.println(namepac);
+        System.out.println(namepacparanomasths);
     }
 }}
