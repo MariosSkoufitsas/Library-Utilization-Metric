@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class NewMain {
     
     static ArrayList<String> namepac = new ArrayList<String>();
     static ArrayList<String> namepacparanomasths = new ArrayList<String>();
+    static ArrayList<String> nameinamain = new ArrayList<String>();
     
     
     
@@ -138,12 +140,15 @@ public class NewMain {
             if(bolmethee){
                     namepac.add(nWords);
                     namepacparanomasths.add("0");
+                    nameinamain.add("0");
                     bolmethee=false;
                             }
+                            int countermain=0;
                         int kametr=0,ka;
                         for(ka=0; ka<namepac.size(); ka++){
                             if(namepac.get(ka).equals(nWords)){
                                 String na=namepacparanomasths.get(ka);
+                                countermain=ka;
                                 int nana=parseInt(na);
                                 nana++;
                                 namepacparanomasths.set(ka,String.valueOf(nana));
@@ -159,7 +164,7 @@ public class NewMain {
                                     
                                     namepac.add(nWords);
                                     namepacparanomasths.add("1");
-                                    //System.out.println(namepac);
+                                    nameinamain.add("0");
                                     
                                 }
             
@@ -167,13 +172,30 @@ public class NewMain {
             
             
                         for(int i=0; i<methodmain.size(); i++){
-                            if(methodmain.get(i).equals("Optional["+md.resolve().getClassName()+"] "+md.resolve().getName())){
-                            mainmethod=mainmethod+1;
-                            System.out.println(mainmethod);
+                            //System.out.println("Edw arxidiiiiiiiiiiiiiiii "+i);
+                            //System.out.println("Edw   Optional["+methodmain.get(i));
+                            String if1,if2;
+                            if1=methodmain.get(i).toLowerCase();
+                            if2="Optional["+md.resolve().getClassName().toLowerCase()+"] "+md.resolve().getName().toLowerCase();
+                            if(if1.toLowerCase().equals(if2.toLowerCase())){
+                                
+                                
+                                String naa=nameinamain.get(countermain);
+                                
+                                int nana=parseInt(naa);
+                                nana++;
+                                nameinamain.set(countermain,String.valueOf(nana));
+                                        
+                                        
+                                mainmethod=mainmethod+1;
+                                System.out.println(mainmethod);
                                 }
 
             
             }
+                        System.out.println("Method Name Printed: Optional["+md.resolve().getClassName()+"] "+md.resolve().getName());
+                        
+                        
 
         }
         
@@ -182,7 +204,7 @@ public class NewMain {
             arm.add(md.resolve().getQualifiedName());
         }*/
         
-        System.out.println("Method Name Printed: "+md.resolve().getPackageName());
+        //System.out.println("Method Name Printed: "+md.resolve().getPackageName()+" "+md.resolve().getClassName()+" "+md.resolve().getName());
         }          
  }
         //emafanizoume to plhthos ton methodon kai ton bibliothikon
@@ -353,5 +375,12 @@ public class NewMain {
         System.out.println("Apotelesma "+b+" %");
         System.out.println(namepac);
         System.out.println(namepacparanomasths);
+        System.out.println(nameinamain);
+        double sum;
+        for(int i=0; i<nameinamain.size(); i++){
+            sum=(Double.parseDouble(nameinamain.get(i))/Double.parseDouble(namepacparanomasths.get(i)))*100;
+            System.out.println(namepac.get(i)+"  "+sum+" %");
+        }
     }
 }}
+
