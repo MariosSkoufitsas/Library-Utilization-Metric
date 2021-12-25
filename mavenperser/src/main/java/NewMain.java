@@ -2,6 +2,8 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node.BreadthFirstIterator;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -29,6 +31,7 @@ import java.io.PrintWriter;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,12 +54,9 @@ public class NewMain {
     static boolean afalse=false;
     static boolean bfalse=false;
     
-    
     static ArrayList<String> namepac = new ArrayList<String>();
     static ArrayList<String> namepacparanomasths = new ArrayList<String>();
     static ArrayList<String> nameinamain = new ArrayList<String>();
-    
-    
     
     //trexoume sth main kai mas epistrefei ta onomata
     private static class MethodVisitor extends VoidVisitorAdapter
@@ -76,7 +76,6 @@ public class NewMain {
         return newList;
     } 
     
-    
     private static class MethodVisitor2 extends VoidVisitorAdapter<Void>{
         @Override
         public void visit(MethodCallExpr n, Void arg) {
@@ -95,8 +94,6 @@ public class NewMain {
         }
     }
     public static String[] myBadGlobalArray = new String[10];
-    
-     //private static final String FILE_PATH = "C:\\Users\\mario\\Desktop\\mavenperser\\src\\main\\java\\NewClass.java";
 
         //statik metablites stous metrites gia methodous kai bibliothikes
          public  static int i=0,i2=0;
@@ -111,32 +108,18 @@ public class NewMain {
         
         if(md.isPublic()){
             i++;
-            
-            
-            
-            
+
             String mystring=md.resolve().getPackageName();
-            
-            
-            
-            
-            //String strings =mystring.substring(1,mystring.lastIndexOf("."));
-            //System.out.println("pali ksekinhma neoi agvnes "+strings);
-            
-            
-            
+
             String [] arr = mystring.split("\\.");
             int N=3; 
             String nWords="";
-
-
             for(int i=0; i<N ; i++){
                 nWords = nWords + arr[i] + "."  ;
             }
 
-            System.out.println(nWords);
-            
- 
+            //System.out.println(nWords);
+
             if(bolmethee){
                     namepac.add(nWords);
                     namepacparanomasths.add("0");
@@ -167,44 +150,63 @@ public class NewMain {
                                     nameinamain.add("0");
                                     
                                 }
-            
-                                   
-            
-            
+
                         for(int i=0; i<methodmain.size(); i++){
-                            //System.out.println("Edw arxidiiiiiiiiiiiiiiii "+i);
-                            //System.out.println("Edw   Optional["+methodmain.get(i));
                             String if1,if2;
                             if1=methodmain.get(i).toLowerCase();
                             if2="Optional["+md.resolve().getClassName().toLowerCase()+"] "+md.resolve().getName().toLowerCase();
                             if(if1.toLowerCase().equals(if2.toLowerCase())){
-                                
-                                
                                 String naa=nameinamain.get(countermain);
-                                
                                 int nana=parseInt(naa);
                                 nana++;
-                                nameinamain.set(countermain,String.valueOf(nana));
-                                        
-                                        
+                                System.out.println("looooooooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+md);
+                                
+                                
+                                
+                                
+                                
+                                CompilationUnit cu;
+                                try
+                                {
+                                //cu = StaticJavaParser.parse(md);
+                                   }
+                                 finally
+                                    {
+                                  //in.close();
+                                    }
+                                 new MethodVisitor().visit(md, null);
+                                ArrayList<String>
+                                newList=removeDuplicates(arm);
+                                int sum=0;
+                                for(int o=0; o<newList.size(); o++){
+                                System.out.println(newList.get(o));
+                                sum=o;
+                                }
+                                
+                                 BreadthFirstIterator bfi = new BreadthFirstIterator(md);
+                                 while (bfi.hasNext()) {
+                                    com.github.javaparser.ast.Node node = bfi.next();
+                                    if (node instanceof Modifier) {
+                                        System.out.println("Method name =name +name: " + bfi.next().toString());
+                                        break;
+                                         }
+                                }
+                                
+                                 
+                                 
+                                 
+                                
+                                /*Instant instant= Instant.parse("class X { "+md+ "}");
+                                System.out.println("EDWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"+instant.toString());*/
+                                nameinamain.set(countermain,String.valueOf(nana));     
                                 mainmethod=mainmethod+1;
                                 System.out.println(mainmethod);
                                 }
 
             
-            }
+                    }
                         System.out.println("Method Name Printed: Optional["+md.resolve().getClassName()+"] "+md.resolve().getName());
-                        
-                        
-
-        }
-        
-
-        /*if(bolmethee){
-            arm.add(md.resolve().getQualifiedName());
-        }*/
-        
-        //System.out.println("Method Name Printed: "+md.resolve().getPackageName()+" "+md.resolve().getClassName()+" "+md.resolve().getName());
+                }
         }          
  }
         //emafanizoume to plhthos ton methodon kai ton bibliothikon
@@ -299,8 +301,7 @@ public class NewMain {
     private static final String FILE_PATH4="C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources";
     
     public static void main(String[] args) throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
-        
-        
+
         Scanner myObj = new Scanner(System.in);
         String userName;
     
