@@ -59,8 +59,13 @@ public class NewMain {
     static ArrayList<String> nameinamain = new ArrayList<String>();
     
     //trexoume sth main kai mas epistrefei ta onomata
-    private static class MethodVisitor extends VoidVisitorAdapter
-    {
+    private static class MethodVisitor extends VoidVisitorAdapter<Void>
+    {@Override
+        public void visit(MethodCallExpr ml, Void arg) {
+                System.out.println("ep edwwwwwwwwwwwwwwwww  "+ml.getName());
+        }
+            
+        
 
 }
            //afairoume diplotupa apo array list autos o tropos mporei na alaxtei
@@ -161,41 +166,12 @@ public class NewMain {
                                 nana++;
                                 System.out.println("looooooooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+md);
                                 
-                                
-                                
-                                
-                                
-                                CompilationUnit cu;
-                                try
-                                {
-                                //cu = StaticJavaParser.parse(md);
-                                   }
-                                 finally
-                                    {
-                                  //in.close();
-                                    }
-                                 new MethodVisitor().visit(md, null);
-                                ArrayList<String>
-                                newList=removeDuplicates(arm);
-                                int sum=0;
-                                for(int o=0; o<newList.size(); o++){
-                                System.out.println(newList.get(o));
-                                sum=o;
-                                }
-                                
-                                 BreadthFirstIterator bfi = new BreadthFirstIterator(md);
-                                 while (bfi.hasNext()) {
-                                    com.github.javaparser.ast.Node node = bfi.next();
-                                    if (node instanceof Modifier) {
-                                        System.out.println("Method name =name +name: " + bfi.next().toString());
-                                        break;
-                                         }
-                                }
-                                
+
+                               
+                                VoidVisitor<Void> methodNameVisitor = new MethodVisitor();
+                                methodNameVisitor.visit(md, null);
                                  
-                                 
-                                 
-                                
+                         
                                 /*Instant instant= Instant.parse("class X { "+md+ "}");
                                 System.out.println("EDWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"+instant.toString());*/
                                 nameinamain.set(countermain,String.valueOf(nana));     
