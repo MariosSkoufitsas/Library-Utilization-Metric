@@ -49,20 +49,30 @@ public class NewMain {
     static ArrayList<String> soursepath = new ArrayList<String>();
     static ArrayList<String> methodmain = new ArrayList<String>();
     static ArrayList<String> arm = new ArrayList<String>();
+    static ArrayList<String> methodcallgraph = new ArrayList<String>();
+    
     static boolean bolmethee=true;
     static double mainmethod=0;
     static boolean afalse=false;
     static boolean bfalse=false;
+    static boolean whileloop=false;
     
     static ArrayList<String> namepac = new ArrayList<String>();
     static ArrayList<String> namepacparanomasths = new ArrayList<String>();
     static ArrayList<String> nameinamain = new ArrayList<String>();
+    static ArrayList<String> methodcallgraphcount = new ArrayList<String>();
+    static int counterarray=0;
     
-    //trexoume sth main kai mas epistrefei ta onomata
+    //stis koloumenes methodous mas dinei ta method call expresion
     private static class MethodVisitor extends VoidVisitorAdapter<Void>
     {@Override
         public void visit(MethodCallExpr ml, Void arg) {
-                System.out.println("ep edwwwwwwwwwwwwwwwww  "+ml.getName());
+                System.out.println("ep edwwwwwwwwwwwwwwwww  "+ml.getScope()+" "+ml.getName());
+                methodcallgraph.add(ml.getScope()+" "+ml.getName().asString());
+                System.out.println("pipipipi"+methodcallgraph);
+                //MethodVisitor.Visit(ml);
+                whileloop=true;
+                methodcallgraph=removeDuplicates(methodcallgraph);
         }
             
         
@@ -88,7 +98,7 @@ public class NewMain {
         super.visit(n, arg);
         try{
             arm.add(n.getScope()+" "+n.getNameAsString());
-            System.out.println(n.getScope()+" "+n.getNameAsString());
+            System.out.println("ok "+n.getScope()+" "+n.getNameAsString());
                   
         }
         catch (Exception e) {
@@ -103,6 +113,34 @@ public class NewMain {
         //statik metablites stous metrites gia methodous kai bibliothikes
          public  static int i=0,i2=0;
          
+         
+         private static class MethodNamePrinter2 extends VoidVisitorAdapter<Void> {
+        @Override
+        public void visit(MethodDeclaration mc, Void arg) {
+        super.visit(mc, arg);
+            String if1,if2;
+            
+            
+            for( int i=0; i<methodcallgraph.size(); i++){
+                if1=methodcallgraph.get(i).toLowerCase();
+                if2=("Optional["+mc.resolve().getClassName().toLowerCase()+"] "+mc.resolve().getName()).toLowerCase();
+                if(if1.equals(if2)){
+                    methodcallgraphcount.add(mc.resolve().getName());
+                    System.out.println("Maaaaaaaagkeeeeeesssssssssssssssss ");
+                    
+                    
+                    VoidVisitor<Void> methodNameVisitor4 = new MethodVisitor();
+                    methodNameVisitor4.visit(mc, null);
+                    
+                }
+                
+            }
+            counterarray=methodcallgraph.size()-1;
+                
+            }
+        
+            
+        }
          
         //metrame to plithos toon methodon kai toon biblhothikon
    
@@ -167,13 +205,50 @@ public class NewMain {
                                 System.out.println("looooooooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+md);
                                 
 
+                                
+                                VoidVisitor<Void> methodNameVisitor4 = new MethodVisitor();
+                                methodNameVisitor4.visit(md, null);
+                                
+                                
+                                if(whileloop){
+
+                                    CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+                                    combinedTypeSolver.add(new ReflectionTypeSolver());
+                                    ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
+                                    ProjectRoot projectRoot = new SymbolSolverCollectionStrategy(parserConfiguration).collect(Path.of("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources"));
+                                    for (SourceRoot sourceRoot : projectRoot.getSourceRoots()) {
+                                        try {
+                                        sourceRoot.tryToParse();
+                                        List<CompilationUnit> compilationUnits = sourceRoot.getCompilationUnits();
+                                        for(int x=0; x<compilationUnits.size();x++){
+
+                                            VoidVisitor<Void> methodNameVisitor = new MethodNamePrinter2();
+                                                methodNameVisitor.visit(compilationUnits.get(x), null);
+
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        return;
+                                    }}
+
+                                }    
+                                
+        
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
                                
-                                VoidVisitor<Void> methodNameVisitor = new MethodVisitor();
-                                methodNameVisitor.visit(md, null);
+                                
                                  
                          
-                                /*Instant instant= Instant.parse("class X { "+md+ "}");
-                                System.out.println("EDWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"+instant.toString());*/
+                               
                                 nameinamain.set(countermain,String.valueOf(nana));     
                                 mainmethod=mainmethod+1;
                                 System.out.println(mainmethod);
@@ -328,8 +403,6 @@ public class NewMain {
         combinedTypeSolver.add(new ReflectionTypeSolver());
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
         ProjectRoot projectRoot = new SymbolSolverCollectionStrategy(parserConfiguration).collect(Path.of("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources"));
-        
-         
         for (SourceRoot sourceRoot : projectRoot.getSourceRoots()) {
     try {
         sourceRoot.tryToParse();
@@ -345,6 +418,9 @@ public class NewMain {
         e.printStackTrace();
         return;
     }
+    
+    
+            methodcallgraphcount=removeDuplicates(methodcallgraphcount);
    
         System.out.println("oi  methodoi pou brethikan "+mainmethod+" SYNOLIKES METHODOI ");
         int a=count();
@@ -358,6 +434,7 @@ public class NewMain {
             sum=(Double.parseDouble(nameinamain.get(i))/Double.parseDouble(namepacparanomasths.get(i)))*100;
             System.out.println(namepac.get(i)+"  "+sum+" %");
         }
+        System.out.println("oi diplotipes methodoi einai "+methodcallgraphcount.size());
     }
 }}
 
