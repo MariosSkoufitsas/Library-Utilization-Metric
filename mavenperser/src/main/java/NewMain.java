@@ -67,10 +67,8 @@ public class NewMain {
     private static class MethodVisitor extends VoidVisitorAdapter<Void>
     {@Override
         public void visit(MethodCallExpr ml, Void arg) {
-                System.out.println("ep edwwwwwwwwwwwwwwwww  "+ml.getScope()+" "+ml.getName());
+                
                 methodcallgraph.add(ml.getScope()+" "+ml.getName().asString());
-                System.out.println("pipipipi"+methodcallgraph);
-                //MethodVisitor.Visit(ml);
                 whileloop=true;
                 methodcallgraph=removeDuplicates(methodcallgraph);
         }
@@ -98,7 +96,6 @@ public class NewMain {
         super.visit(n, arg);
         try{
             arm.add(n.getScope()+" "+n.getNameAsString());
-            System.out.println("ok "+n.getScope()+" "+n.getNameAsString());
                   
         }
         catch (Exception e) {
@@ -126,7 +123,6 @@ public class NewMain {
                 if2=("Optional["+mc.resolve().getClassName().toLowerCase()+"] "+mc.resolve().getName()).toLowerCase();
                 if(if1.equals(if2)){
                     methodcallgraphcount.add(mc.resolve().getName());
-                    System.out.println("Maaaaaaaagkeeeeeesssssssssssssssss ");
                     
                     
                     VoidVisitor<Void> methodNameVisitor4 = new MethodVisitor();
@@ -148,7 +144,7 @@ public class NewMain {
         @Override
         public void visit(MethodDeclaration md, Void arg) {
         super.visit(md, arg);
-        
+        i2++;
         if(md.isPublic()){
             i++;
 
@@ -201,11 +197,7 @@ public class NewMain {
                             if(if1.toLowerCase().equals(if2.toLowerCase())){
                                 String naa=nameinamain.get(countermain);
                                 int nana=parseInt(naa);
-                                nana++;
-                                System.out.println("looooooooooooooooooooooooooooooooooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+md);
-                                
-
-                                
+                                nana++;                              
                                 VoidVisitor<Void> methodNameVisitor4 = new MethodVisitor();
                                 methodNameVisitor4.visit(md, null);
                                 
@@ -232,23 +224,7 @@ public class NewMain {
                                     }}
 
                                 }    
-                                
-        
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                               
-                                
-                                 
-                         
-                               
+
                                 nameinamain.set(countermain,String.valueOf(nana));     
                                 mainmethod=mainmethod+1;
                                 System.out.println(mainmethod);
@@ -256,7 +232,7 @@ public class NewMain {
 
             
                     }
-                        System.out.println("Method Name Printed: Optional["+md.resolve().getClassName()+"] "+md.resolve().getName());
+                        System.out.println("Method Name Printed: "+md.resolve().getClassName()+"] "+md.resolve().getName());
                 }
         }          
  }
@@ -266,6 +242,7 @@ public class NewMain {
             return i;
             
         }
+        
  
  
     //auth h methodos mas epistrefei apo to pom posa jar arxeia xrhshmopoioyme kai ta emfanizoyme
