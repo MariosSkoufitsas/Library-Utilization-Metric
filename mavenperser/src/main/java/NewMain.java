@@ -52,6 +52,7 @@ public class NewMain {
     static ArrayList<String> methodcallgraph = new ArrayList<String>();
     
     static boolean bolmethee=true;
+    static boolean bolmethee2=true;
     static double mainmethod=0;
     static boolean afalse=false;
     static boolean bfalse=false;
@@ -61,6 +62,8 @@ public class NewMain {
     static ArrayList<String> namepacparanomasths = new ArrayList<String>();
     static ArrayList<String> nameinamain = new ArrayList<String>();
     static ArrayList<String> methodcallgraphcount = new ArrayList<String>();
+    static ArrayList<String> fullnamepacparanomasths = new ArrayList<String>();
+    static ArrayList<String> graphcounter = new ArrayList<String>();
     static int counterarray=0;
     
     //stis koloumenes methodous mas dinei ta method call expresion
@@ -72,8 +75,6 @@ public class NewMain {
                 whileloop=true;
                 methodcallgraph=removeDuplicates(methodcallgraph);
         }
-            
-        
 
 }
            //afairoume diplotupa apo array list autos o tropos mporei na alaxtei
@@ -121,21 +122,55 @@ public class NewMain {
             for( int i=0; i<methodcallgraph.size(); i++){
                 if1=methodcallgraph.get(i).toLowerCase();
                 if2=("Optional["+mc.resolve().getClassName().toLowerCase()+"] "+mc.resolve().getName()).toLowerCase();
+                
+                
                 if(if1.equals(if2)){
+                    
+                    
+                    String mystring2=mc.resolve().getPackageName();
+                    String [] arr2 = mystring2.split("\\.");
+                    int N=3; 
+                    String nWords2="";
+                    for(int n=0; n<N ; n++){
+                        nWords2 = nWords2 + arr2[n] + "."  ;
+                    }
+                    
+                    
+                     
+                    boolean newflag=true;
+                    
+                   
+                    
+                    for(int fa=0; fa<methodcallgraphcount.size(); fa++){
+                        if( methodcallgraphcount.get(fa).equals(mc.resolve().getName())){
+                            newflag=false;
+                        }
+                            
+                    }
+                    
+                    if(newflag)
+                            {for(int ka=0; ka<namepac.size(); ka++){
+                                            if(namepac.get(ka).equals(nWords2)){
+                                                String na=graphcounter.get(ka);
+                                                
+
+                                                int nana=parseInt(na);
+                                                nana++;
+                                                graphcounter.set(ka,String.valueOf(nana));
+                                            }
+                                        }}
+                    
+   
                     methodcallgraphcount.add(mc.resolve().getName());
-                    
-                    
+                    methodcallgraphcount=removeDuplicates(methodcallgraphcount);
                     VoidVisitor<Void> methodNameVisitor4 = new MethodVisitor();
                     methodNameVisitor4.visit(mc, null);
                     
-                }
-                
+                }     
             }
             counterarray=methodcallgraph.size()-1;
                 
-            }
-        
-            
+            } 
         }
          
         //metrame to plithos toon methodon kai toon biblhothikon
@@ -145,10 +180,7 @@ public class NewMain {
         public void visit(MethodDeclaration md, Void arg) {
         super.visit(md, arg);
         i2++;
-        if(md.isPublic()){
-            i++;
-
-            String mystring=md.resolve().getPackageName();
+        String mystring=md.resolve().getPackageName();
 
             String [] arr = mystring.split("\\.");
             int N=3; 
@@ -156,39 +188,58 @@ public class NewMain {
             for(int i=0; i<N ; i++){
                 nWords = nWords + arr[i] + "."  ;
             }
-
-            //System.out.println(nWords);
-
+ 
+            
             if(bolmethee){
-                    namepac.add(nWords);
-                    namepacparanomasths.add("0");
-                    nameinamain.add("0");
-                    bolmethee=false;
-                            }
-                            int countermain=0;
-                        int kametr=0,ka;
-                        for(ka=0; ka<namepac.size(); ka++){
-                            if(namepac.get(ka).equals(nWords)){
-                                String na=namepacparanomasths.get(ka);
-                                countermain=ka;
-                                int nana=parseInt(na);
-                                nana++;
-                                namepacparanomasths.set(ka,String.valueOf(nana));
-                            }
-                                if(!namepac.get(ka).equals(nWords)){
-                                    kametr++;
+                namepac.add(nWords);
+                namepacparanomasths.add("0");
+                nameinamain.add("0");
+                fullnamepacparanomasths.add("0");
+                graphcounter.add("0");
+                bolmethee=false;
+                }
+            
+            int countermain=0;
+            int kametr=0,ka;
+            for(ka=0; ka<namepac.size(); ka++){
+                if(namepac.get(ka).equals(nWords)){
+                    String na=fullnamepacparanomasths.get(ka);
+                    countermain=ka;
+                    int nana=parseInt(na);
+                    nana++;
+                    fullnamepacparanomasths.set(ka,String.valueOf(nana));
+                    }
+                    if(!namepac.get(ka).equals(nWords)){
+                        kametr++;
                                     
-                                }
+                            }
   
                             }
 
                         if(ka==kametr){
                                     
                                     namepac.add(nWords);
-                                    namepacparanomasths.add("1");
+                                    namepacparanomasths.add("0");
                                     nameinamain.add("0");
+                                    fullnamepacparanomasths.add("0");
+                                    graphcounter.add("0");
                                     
                                 }
+   
+        if(md.isPublic()){
+            i++;
+            
+
+            for(ka=0; ka<namepac.size(); ka++){
+                if(namepac.get(ka).equals(nWords)){
+                    String na=namepacparanomasths.get(ka);
+                    countermain=ka;
+                    int nana=parseInt(na);
+                    nana++;
+                    namepacparanomasths.set(ka,String.valueOf(nana));
+                        }  
+                    }
+
 
                         for(int i=0; i<methodmain.size(); i++){
                             String if1,if2;
@@ -218,25 +269,25 @@ public class NewMain {
                                                 methodNameVisitor.visit(compilationUnits.get(x), null);
 
                                         }
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                        return;
-                                    }}
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                            return;
+                                        }
+                                    }
 
                                 }    
 
-                                nameinamain.set(countermain,String.valueOf(nana));     
-                                mainmethod=mainmethod+1;
-                                System.out.println(mainmethod);
-                                }
+                            nameinamain.set(countermain,String.valueOf(nana));     
+                            mainmethod=mainmethod+1;
+                            System.out.println(mainmethod);
+                            }
 
-            
                     }
-                        System.out.println("Method Name Printed: "+md.resolve().getClassName()+"] "+md.resolve().getName());
+                    System.out.println("Method Name Printed: "+md.resolve().getClassName()+"] "+md.resolve().getName());
                 }
         }          
  }
-        //emafanizoume to plhthos ton methodon kai ton bibliothikon
+        //emafanizoume to plhthos ton methodon 
         public static int count(){
             System.out.println("Number of methods: "+i);
             return i;
@@ -323,9 +374,6 @@ public class NewMain {
 } 
      
     //pairnoyme ta path pou theloume
-    private static final String FILE_PATH = "C:\\Users\\mario\\Desktop\\πτυχιακη\\src\\main\\java\\calculator\\Main.java";
-    private static final String FILE_PATH2="C:\\Users\\mario\\Desktop\\πτυχιακη\\src\\main\\java\\calculator\\Main.java";   
-    //private static final String FILE_PATH3="C:\\Users\\mario\\Desktop\\testProject  C:\\Users\\mario\\Desktop\\JavaCodeMetricsCalculator-src_code_analyzer";
     private static final String FILE_PATH4="C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources";
     
     public static void main(String[] args) throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
@@ -337,7 +385,7 @@ public class NewMain {
         System.out.println("Enter path project"); 
         FILE_PATH3 = myObj.nextLine();
 
-        
+        //Symbolsover gia th main tou project
         CombinedTypeSolver combinedTypeSolver2 = new CombinedTypeSolver();
         combinedTypeSolver2.add(new ReflectionTypeSolver());
         ParserConfiguration parserConfiguration2 = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver2));
@@ -347,7 +395,6 @@ public class NewMain {
     try {
         sourceRoot.tryToParse();
         List<CompilationUnit> compilationUnits = sourceRoot.getCompilationUnits();
-        //System.out.println(compilationUnits);
         for(int x=0; x<compilationUnits.size();x++){
             VoidVisitor<Void> methodNameVisitor2 = new MethodVisitor2();
                 methodNameVisitor2.visit(compilationUnits.get(x), null);
@@ -355,10 +402,11 @@ public class NewMain {
     } catch (IOException e) {
         e.printStackTrace();
         return;}}
-        //bolmethee=false;
+        
         
         methodmain=removeDuplicates(arm);
         
+        //maven entoles gia extract gia jar kai sourses
         printPomDependencies(FILE_PATH3);
         String CWD = System.getProperty("user.dir");       
         String cmd_Command="cd " + FILE_PATH3 +" & mvn dependency:copy-dependencies -DexcludeTransitive -DoutputDirectory="+CWD+"\\target\\lib";     
@@ -374,7 +422,7 @@ public class NewMain {
             CMD(cmd3);      
         }
 
-        
+        //Symbolsover gia ta jar arxeia
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         //combinedTypeSolver.add(new JavaParserTypeSolver(new File("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources")));
         combinedTypeSolver.add(new ReflectionTypeSolver());
@@ -395,23 +443,43 @@ public class NewMain {
         e.printStackTrace();
         return;
     }
-    
-    
-            methodcallgraphcount=removeDuplicates(methodcallgraphcount);
-   
+
         System.out.println("oi  methodoi pou brethikan "+mainmethod+" SYNOLIKES METHODOI ");
         int a=count();
         double b=(mainmethod/a)*100;
         System.out.println("Apotelesma "+b+" %");
+        System.out.println("------------------------------------------------");
         System.out.println(namepac);
         System.out.println(namepacparanomasths);
         System.out.println(nameinamain);
         double sum;
+        
         for(int i=0; i<nameinamain.size(); i++){
             sum=(Double.parseDouble(nameinamain.get(i))/Double.parseDouble(namepacparanomasths.get(i)))*100;
             System.out.println(namepac.get(i)+"  "+sum+" %");
         }
+        
+        System.out.println("------------------------------------------------");
         System.out.println("oi diplotipes methodoi einai "+methodcallgraphcount.size());
+        
+        System.out.println(fullnamepacparanomasths);
+        System.out.println(graphcounter);
+        
+        
+        for(int i=0; i<fullnamepacparanomasths.size(); i++){
+            
+           if(!graphcounter.get(i).equals("0"))
+                {
+                String na=graphcounter.get(i);             
+                    int nana=parseInt(na);
+                    nana++;
+                    graphcounter.set(i,String.valueOf(nana));
+                    }
+
+            sum=(Double.parseDouble(graphcounter.get(i))/Double.parseDouble(fullnamepacparanomasths.get(i)))*100;
+            System.out.println(namepac.get(i)+"  "+sum+" %");
+        }
     }
-}}
+  }
+}
 
