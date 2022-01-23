@@ -34,8 +34,12 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -71,9 +75,51 @@ public class NewMain {
     {@Override
         public void visit(MethodCallExpr ml, Void arg) {
                 
-                methodcallgraph.add(ml.getScope()+" "+ml.getName().asString());
+                
                 whileloop=true;
-                methodcallgraph=removeDuplicates(methodcallgraph);
+                
+                
+                String mystring2=ml.getScope().toString();
+                    String [] arr2 = mystring2.split("^new *");
+                    int N=1; 
+                    String nWords2="";
+                    for(int t=0; t<N ; t++){
+                        nWords2 = nWords2 + arr2[t] + "."  ;
+                    }
+                    
+              if(nWords2.startsWith("Optional[new")){        
+                  String lala="";
+                  lala=nWords2.substring(13);
+                  lala = lala.replaceAll("\\(.*\\)", "");
+                  lala=("Optional["+lala);
+                  lala = lala.substring(0,lala.length()-1);
+                  methodcallgraph.add(lala+" "+ml.getName().toString());
+              }
+              
+              
+              String k=nWords2;
+              k = k.substring(0,k.length()-1);
+              
+              String pattern="\\.";
+            Pattern p=Pattern.compile(pattern);
+            Matcher m=p.matcher(k);
+            if(m.find()){
+ 
+                 
+                 k=k.substring(0,k.indexOf("."));
+                 k=k+"]";
+                 methodcallgraph.add(k+" "+ml.getName().toString());
+                
+                }
+              
+              
+              
+              else{
+                  methodcallgraph.add(ml.traverseScope()+" "+ml.getName().toString());
+              }
+              methodcallgraph=removeDuplicates(methodcallgraph);
+                
+                
         }
 
 }
@@ -96,8 +142,46 @@ public class NewMain {
             
         super.visit(n, arg);
         try{
-            arm.add(n.getScope()+" "+n.getNameAsString());
-                  
+            
+            
+            String mystring2=n.getScope().toString();
+                    String [] arr2 = mystring2.split("^new *");
+                    int N=1; 
+                    String nWords2="";
+                    for(int t=0; t<N ; t++){
+                        nWords2 = nWords2 + arr2[t] + "."  ;
+                    }
+                    
+              if(nWords2.startsWith("Optional[new")){
+                  String lala="";
+                  lala=nWords2.substring(13);
+                  lala = lala.replaceAll("\\(.*\\)", "");
+                  lala=("Optional["+lala);
+                  lala = lala.substring(0,lala.length()-1);
+                  arm.add(lala+" "+n.getName().toString());
+              }
+              
+              String k=nWords2;
+              k = k.substring(0,k.length()-1);
+              
+              String pattern="\\.";
+            Pattern p=Pattern.compile(pattern);
+            Matcher m=p.matcher(k);
+            if(m.find()){
+ 
+                 
+                 k=k.substring(0,k.indexOf("."));
+                 k=k+"]";
+                 arm.add(k+" "+n.getName().toString());
+                
+                }
+              
+              else{
+              
+                  arm.add(n.traverseScope()+" "+n.getName().toString());
+
+              }
+           
         }
         catch (Exception e) {
         e.printStackTrace();
@@ -152,7 +236,7 @@ public class NewMain {
                             {for(int ka=0; ka<namepac.size(); ka++){
                                             if(namepac.get(ka).equals(nWords2)){
                                                 String na=graphcounter.get(ka);
-                                                
+                                                System.out.println("Method in Name Printed: "+mc.resolve().getQualifiedName());
 
                                                 int nana=parseInt(na);
                                                 nana++;
@@ -173,6 +257,8 @@ public class NewMain {
             } 
         }
          
+         
+         
         //metrame to plithos toon methodon kai toon biblhothikon
    
         private static class MethodNamePrinter extends VoidVisitorAdapter<Void> {
@@ -180,6 +266,7 @@ public class NewMain {
         public void visit(MethodDeclaration md, Void arg) {
         super.visit(md, arg);
         i2++;
+        
         String mystring=md.resolve().getPackageName();
 
             String [] arr = mystring.split("\\.");
@@ -246,12 +333,12 @@ public class NewMain {
                             if1=methodmain.get(i).toLowerCase();
                             if2="Optional["+md.resolve().getClassName().toLowerCase()+"] "+md.resolve().getName().toLowerCase();
                             if(if1.toLowerCase().equals(if2.toLowerCase())){
+                                System.out.println("Method Name Printed: "+md.resolve().getQualifiedName());
                                 String naa=nameinamain.get(countermain);
                                 int nana=parseInt(naa);
                                 nana++;                              
                                 VoidVisitor<Void> methodNameVisitor4 = new MethodVisitor();
                                 methodNameVisitor4.visit(md, null);
-                                
                                 
                                 if(whileloop){
 
@@ -275,7 +362,8 @@ public class NewMain {
                                         }
                                     }
 
-                                }    
+                                }  
+                                   
 
                             nameinamain.set(countermain,String.valueOf(nana));     
                             mainmethod=mainmethod+1;
@@ -283,7 +371,7 @@ public class NewMain {
                             }
 
                     }
-                    System.out.println("Method Name Printed: "+md.resolve().getClassName()+"] "+md.resolve().getName());
+                    
                 }
         }          
  }
@@ -308,12 +396,12 @@ public class NewMain {
     for (int i = 0; i < dependencyNodes.getLength(); i++) {
         final Node n = dependencyNodes.item(i);
         final org.w3c.dom.NodeList list = n.getChildNodes();
-        System.out.println("---------------***********-------------------");
+        //.out.println("---------------***********-------------------");
         for (int j = 0; j < list.getLength(); j++) {
             final Node n2 = list.item(j);
             // do not print empty text nodes or others...
             if (n2.getNodeType() != Node.ELEMENT_NODE) continue;
-            System.out.println(n2.getNodeName() + ":" + n2.getTextContent());
+            //.out.println(n2.getNodeName() + ":" + n2.getTextContent());
         }
     }
 } 
@@ -354,7 +442,7 @@ public class NewMain {
     {
         final Node n = dependencyNodes.item(i);
         final org.w3c.dom.NodeList list = n.getChildNodes();
-        System.out.println("---------------************-------------------"+n.getTextContent());
+        //System.out.println("---------------************-------------------"+n.getTextContent());
         String name="";
         for (int j = 0; j < list.getLength(); j++) 
         {
@@ -390,7 +478,7 @@ public class NewMain {
         combinedTypeSolver2.add(new ReflectionTypeSolver());
         ParserConfiguration parserConfiguration2 = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver2));
         ProjectRoot projectRoot2 = new SymbolSolverCollectionStrategy(parserConfiguration2).collect(Path.of(FILE_PATH3+"\\src\\main"));
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        //System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         for (SourceRoot sourceRoot : projectRoot2.getSourceRoots()) {
     try {
         sourceRoot.tryToParse();
@@ -482,4 +570,3 @@ public class NewMain {
     }
   }
 }
-
