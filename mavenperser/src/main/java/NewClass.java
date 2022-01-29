@@ -30,6 +30,4 @@ import java.io.FileNotFoundException;
 
 
 
-public class NewClass {
-    
-}
+

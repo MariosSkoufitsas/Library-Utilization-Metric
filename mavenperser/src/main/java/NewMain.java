@@ -566,6 +566,7 @@ public class NewMain {
 
             sum=(Double.parseDouble(graphcounter.get(i))/Double.parseDouble(fullnamepacparanomasths.get(i)))*100;
             System.out.println(namepac.get(i)+"  "+sum+" %");
+            System.out.println();
         }
     }
   }
