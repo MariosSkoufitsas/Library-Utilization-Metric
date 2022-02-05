@@ -37,16 +37,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-   
+ 
 public class NewMain {
     
     //ArrayList<String> soursepath = new ArrayList<String>();
@@ -135,7 +137,7 @@ public class NewMain {
         }
         return newList;
     } 
-    
+          
     private static class MethodVisitor2 extends VoidVisitorAdapter<Void>{
         @Override
         public void visit(MethodCallExpr n, Void arg) {
@@ -143,7 +145,7 @@ public class NewMain {
         super.visit(n, arg);
         try{
             
-            
+                    
             String mystring2=n.getScope().toString();
                     String [] arr2 = mystring2.split("^new *");
                     int N=1; 
