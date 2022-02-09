@@ -347,7 +347,7 @@ public class NewMain {
                                     CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
                                     combinedTypeSolver.add(new ReflectionTypeSolver());
                                     ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
-                                    ProjectRoot projectRoot = new SymbolSolverCollectionStrategy(parserConfiguration).collect(Path.of("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources"));
+                                    ProjectRoot projectRoot = new SymbolSolverCollectionStrategy(parserConfiguration).collect(Path.of("C:\\Users\\mario\\Desktop\\git\\mskoupt\\mavenperser\\target\\lib\\sources"));
                                     for (SourceRoot sourceRoot : projectRoot.getSourceRoots()) {
                                         try {
                                         sourceRoot.tryToParse();
@@ -464,7 +464,7 @@ public class NewMain {
 } 
      
     //pairnoyme ta path pou theloume
-    private static final String FILE_PATH4="C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources";
+    private static final String FILE_PATH4="C:\\Users\\mario\\Desktop\\git\\mskoupt\\mavenperser\\target\\lib\\sources";
     
     public static void main(String[] args) throws FileNotFoundException, IOException, SAXException, ParserConfigurationException {
 
@@ -505,7 +505,7 @@ public class NewMain {
         CMD(cmd2);       
         String cd_Command="cd " + FILE_PATH3+"& mvn dependency:copy-dependencies -Dclassifier=sources  -DexcludeTransitive -DoutputDirectory="+CWD+"\\target\\lib\\sources";       
         CMD(cd_Command);       
-        File folder = new File("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources");      
+        File folder = new File("C:\\Users\\mario\\Desktop\\git\\mskoupt\\mavenperser\\target\\lib\\sources");      
         File[] listOfFiles = folder.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
             String cmd3="cd "+FILE_PATH4 +" & jar xf "+listOfFiles[i].getName();;
@@ -517,7 +517,7 @@ public class NewMain {
         //combinedTypeSolver.add(new JavaParserTypeSolver(new File("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources")));
         combinedTypeSolver.add(new ReflectionTypeSolver());
         ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
-        ProjectRoot projectRoot = new SymbolSolverCollectionStrategy(parserConfiguration).collect(Path.of("C:\\Users\\mario\\Desktop\\mavenperser\\target\\lib\\sources"));
+        ProjectRoot projectRoot = new SymbolSolverCollectionStrategy(parserConfiguration).collect(Path.of("C:\\Users\\mario\\Desktop\\git\\mskoupt\\mavenperser\\target\\lib\\sources"));
         for (SourceRoot sourceRoot : projectRoot.getSourceRoots()) {
     try {
         sourceRoot.tryToParse();
